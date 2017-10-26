@@ -52,3 +52,93 @@ app.get("/blogs", function(req, res){
 	  </div>
 	</div>
 ```
+* styling the form
+```
+<div class="ui main text container segment">  
+    <div class="ui huge header">New Blog</div>
+    <form class="ui form"action="/blogs" method="POST">
+        <div class="field">
+            <label>Title</label>
+            <input type="text" name="blog[title]" placeholder="title">
+        </div>
+        <div class="field">
+            <label>Image</label>
+            <input type="text" name="blog[image]" placeholder="image url">
+        </div>
+        <div class="field">
+            <label>Blog Content</label>
+            <textarea name="blog[body]"></textarea>
+        </div>
+        <input class="ui violet basic button" type="submit"> </button>
+    </form>
+</div>
+```
+
+## Puting the C in CRUD - create
+
+* Add NEW ROUTE
+* Add NEW template
+```
+app.get("/blogs/new",function(req, res){
+    res.render("new");
+})
+```
+* Add CREATE ROUTE
+* Add CREATE template
+```
+app.post("/blogs",function(req, res){
+    Blog.create(req.body.blog,function(err, newBlog){
+        if(err){
+            res.render("new");
+        } else{
+            res.redirect("/blogs");
+        }
+    });
+});
+```
+
+## SHOW time - findById
+
+* Add SHOW Route
+* Add SHOW template
+
+```
+app.get("/blogs/:id", function(req, res){
+     Blog.findById(req.params.id,function(err, foundBlog){
+        if(err) {
+            res.redirect("/blogs");
+        } else {
+            res.render("show",{blog:foundBlog});  
+        }
+    });
+})
+```
+* Style the SHOW page
+```
+    <div class="ui main text container segment">  
+        <div class="ui huge header"><%= blog.title %></div>
+        <div class="ui top attached">
+            <div class="item">
+                <img class="ui centered rounded image" src="<%= blog.image%>">
+                <div class="content">
+                    <span><%= blog.created.toDateString()%></span> 
+                </div>
+                <div class="description">
+                    <p><%- blog.body%></p>
+                    ////// - will run the tag codes
+                </div>
+            </div>
+        </div>
+    </div>
+```
+
+* Limit the strings in INDEX page
+```
+<p><%= blog.body.substring(0,80)%> ... </p>
+```
+
+## Edit / Update
+
+* Add Edit ROUTE & FORM
+* Add Update ROUTE & FORM
+* Add Method-Override

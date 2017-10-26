@@ -185,3 +185,68 @@ app.put("/blogs/:id", function(req, res){
 ```
 app.use(methodOverride("_method"));
 ```
+
+## DESTORY
+* Add Delete button in the Show and Index page
+```
+<form action="/blogs/<%= blog._id%>?_method=DELETE" method="PSOT" >
+    <button class="ui orange basic button"> Delete </button>
+</form>
+```
+* Add Destory Route
+```
+app.delete("/blogs/:id", function(req, res){
+    Blog.findByIdAndRemove(req.params.id, function(err){
+        if(err) {
+            res.redirect("/blogs");
+            } else {
+                res.redirect("/blogs");
+            }
+    });
+});
+```
+* Add an Endit Button (form not default into inline display, we need to change it in CSS file)
+```
+ <a  class="ui blue basic button" href="/blogs/<%= blog.id %>/edit">Edit</a>
+```
+
+## Final Updates
+* Sanitize blog body (npm express-sanitizer)
+```
+req.body.blog.body = req.sanitize(req.body.blog.body);
+
+```
+
+* Style Index
+```
+<div class="ui main text container">
+  <div class="ui huge header">RESTful Blog App</div>
+  <div class ="ui top attached segment">
+    <div class="ui divided items">
+        <% blogs.forEach(function(blog){ %>
+            <div class="item">
+                <div class="image">
+                    <img src="<%= blog.image%>">  
+                </div>
+                <div class="content">
+                    <a class="header" href="/blogs/<%= blog._id %>"><%=blog.title%></a>
+                    <div class="meta">
+                        <span><%= blog.created.toDateString()%></span>
+                    </div>
+                    <div class="description">
+                        <p><%- blog.body.substring(0,80)%> ... </p> 
+                    </div>
+                    <div class="exrea">
+                        <a class="ui floated basic violet button" href="/blogs/<%= blog._id %> ">
+                        Read More <i class="right chevron icon"></i></a> 
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+     </div>
+   </div>
+</div>
+
+```
+
+* Update REST Table

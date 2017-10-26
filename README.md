@@ -139,6 +139,49 @@ app.get("/blogs/:id", function(req, res){
 
 ## Edit / Update
 
-* Add Edit ROUTE & FORM
-* Add Update ROUTE & FORM
-* Add Method-Override
+* Add Edit ROUTE & FORM -- used value to get the contents and chagned
+```
+app.get("/blogs/:id/edit", function(req, res){
+    Blog.findById(req.params.id, function(err,foundBlog){
+        if(err) {
+            res.redirect("/blogs");
+        } else {
+            res.render("edit", {blog:foundBlog});
+        }
+    })
+});
+```
+* Use "npm method-override" to change the method from POST to PUT (since the HTML5 couldn't send the PUT request directily)
+```
+ <form class="ui form"action="/blogs/<%= blog._id %>?_method=PUT" method="POST">
+```
+* Change the placeholder attribute to "value"
+```
+        <div class="field">
+            <label>Title</label>
+            <input type="text" name="blog[title]" value ="<%= blog.title %>">
+        </div>
+        <div class="field">
+            <label>Image</label>
+            <input type="text" name="blog[image]" value="<%= blog.image %>">
+        </div>
+```
+
+* Add Update ROUTE & FORM -- Send the new contents to the right place
+```
+app.put("/blogs/:id", function(req, res){
+    // find exist page and update the data
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
+        if(err){
+            res.redirect("/blogs");
+        } else{
+            res.redirect("/blogs/"+req.params.id);
+        }
+    })
+});
+```
+
+* Add Method-Override // in Node.js
+```
+app.use(methodOverride("_method"));
+```

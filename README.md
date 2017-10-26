@@ -41,3 +41,14 @@ app.get("/blogs", function(req, res){
 * In the index.ejs use the data from above ROUTE
 
 ## Basic Layout
+
+* Use Semantic UI to add a navbar
+```
+	<div class="ui fixed inverted menu">
+	  <div class="ui container">
+		<div class="header item"><i class="paint brush icon"></i>Blog Site</div>
+		<a href="/" class="item">Home</a>
+		<a href="/blogs/new" class="item">New Post</a>
+	  </div>
+	</div>
+```
